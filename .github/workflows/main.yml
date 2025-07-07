@@ -3,7 +3,7 @@ name: CI Foodgram
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   copy_files_to_server:
