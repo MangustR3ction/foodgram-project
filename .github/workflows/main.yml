@@ -45,7 +45,8 @@ jobs:
         with:
           context: ./frontend/
           push: true
-          tags: echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}"/foodgram_frontend:latest
+          run: echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          tags: ${{ secrets.DOCKER_USERNAME }}"/foodgram_frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
