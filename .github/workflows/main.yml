@@ -27,9 +27,7 @@ jobs:
         with:
           context: ./backend/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: MangustR3ction/foodgram_backend:latest
 
   build_frontend:
     name: Build and push frontend image
@@ -52,9 +50,7 @@ jobs:
         with:
           context: ./frontend/
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: MangustR3ction/foodgram_frontend:latest
 
   deploy:
     name: Deploy to server
