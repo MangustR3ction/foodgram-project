@@ -75,8 +75,8 @@ jobs:
             cd ~/foodgram/infra
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend
-            sudo docker-compose stop
-            sudo docker-compose rm backend
+            sudo docker-compose down --remove-orphans
+            sudo docker-compose rm -f backend frontend
             rm -f .env
             touch .env
             echo DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} >> .env
@@ -87,7 +87,7 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo DJ_SECRET_KEY=${{ secrets.DJ_SECRET_KEY }} >> .env
-            sudo docker-compose up -d
+            sudo docker-compose up -d --force-recreate
 
   telegram_message:
     name: Send telegram message
