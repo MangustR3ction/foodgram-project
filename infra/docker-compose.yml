@@ -3,7 +3,7 @@ version: '3.3'
 services:
 
   frontend:
-    container_name: foodgram-front
+    container_name: foodgram-frontend
     image: ${DOCKER_USERNAME}/foodgram-frontend:latest
     restart: always
 

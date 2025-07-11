@@ -72,9 +72,9 @@ jobs:
           timeout: 30s
           command_timeout: 10m
           script: |
-            cd /home/${{ secrets.USER }}/foodgram-project/infra
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-project
+            cd ~/foodgram/infra
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend
             sudo docker-compose stop
             sudo docker-compose rm backend
             rm -f .env
