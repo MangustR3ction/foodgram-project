@@ -4,9 +4,8 @@ services:
 
   frontend:
     container_name: foodgram-front
-    build: ../frontend
-    volumes:
-      - ./frontend/:/app/result_build/
+    image: ${DOCKER_USERNAME}/foodgram-frontend:latest
+    restart: always
 
   db:
     container_name: foodgram-db
@@ -19,7 +18,7 @@ services:
 
   backend:
     container_name: foodgram-app
-    build: ../backend
+    image: ${DOCKER_USERNAME}/foodgram-backend:latest
     restart: always
     volumes:
       - static_dir:/app/static/
@@ -47,4 +46,3 @@ volumes:
   static_dir:
   media_dir:
   postgres_data:
-...
