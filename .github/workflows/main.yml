@@ -76,7 +76,8 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend
             sudo docker-compose down --remove-orphans
-            sudo docker network prune -f
+            sleep 5
+            sudo docker network prune -f || true
             sudo docker-compose rm -f backend frontend
             rm -f .env
             touch .env
