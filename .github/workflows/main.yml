@@ -2,9 +2,9 @@ name: Deploy Foodgram
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -56,7 +56,7 @@ jobs:
         POSTGRES_PASSWORD: postgres
         DB_HOST: localhost
         DB_PORT: 5432
-        DJ_SECRET_KEY: test_secret_key
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
       run: |
         cd backend
         python manage.py test --verbosity=2
@@ -86,7 +86,7 @@ jobs:
         tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
-    
+
     - name: Build and push Frontend image
       uses: docker/build-push-action@v5
       with:
@@ -105,11 +105,26 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           # Переходим в директорию проекта
-          cd /home/${{ secrets.USER }}/foodgram
+          cd /home/${{ secrets.USER }}/foodgram-project
           
           # Обновляем код
           git fetch origin
           git reset --hard origin/main
+          
+          # Обновляем .env файл с секретами из GitHub
+          cat > .env << 'EOF'
+          DEBUG=False
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          ALLOWED_HOSTS=158.160.64.165,foooddgrammm.ddns.net,localhost,127.0.0.1
+          CSRF_TRUSTED_ORIGINS=https://158.160.64.165,https://foooddgrammm.ddns.net,https://localhost,http://158.160.64.165,http://foooddgrammm.ddns.net,http://localhost
+          DB_ENGINE=django.db.backends.postgresql
+          DB_NAME=postgres
+          POSTGRES_USER=postgres
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          DB_HOST=db
+          DB_PORT=5432
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          EOF
           
           # Останавливаем контейнеры
           cd infra
@@ -134,5 +149,3 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
           Foodgram успешно развернут!
-          
-          Время деплоя: $(date '+%Y-%m-%d %H:%M:%S') 
