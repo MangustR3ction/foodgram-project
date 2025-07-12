@@ -72,28 +72,32 @@ jobs:
           timeout: 30s
           command_timeout: 10m
           script: |
-            cd ~/foodgram/infra
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:latest
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest
+            cd ~/foodgram/infra || exit 1
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:latest || exit 1
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest || exit 1
             sudo docker-compose down --remove-orphans || true
-            sudo docker system prune -f || true
+            sleep 5
+            sudo docker container prune -f || true
+            sudo docker image prune -f || true
             sudo docker network prune -f || true
+            sudo docker volume prune -f || true
             rm -f .env
             touch .env
-            echo DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }} >> .env
-            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
-            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
-            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            echo DJ_SECRET_KEY=${{ secrets.DJ_SECRET_KEY }} >> .env
-            sudo docker-compose up -d --force-recreate
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+            echo "DB_ENGINE=${{ secrets.DB_ENGINE }}" >> .env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+            echo "DJ_SECRET_KEY=${{ secrets.DJ_SECRET_KEY }}" >> .env
+            sudo docker-compose up -d || exit 1
 
   telegram_message:
     name: Send telegram message
     runs-on: ubuntu-latest
     needs: deploy
+    if: success()
     steps:
       - uses: actions/checkout@master
       - name: send custom message with message
