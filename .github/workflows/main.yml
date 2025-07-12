@@ -76,12 +76,12 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:latest || exit 1
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest || exit 1
             sudo docker-compose down --remove-orphans || true
-            sleep 15
-            sudo docker ps -a --filter "name=foodgram" --format "{{.Names}}" | xargs -r sudo docker rm -f || true
-            sudo docker container prune -f || true
-            sudo docker image prune -f || true
-            sudo docker network prune -f || true
+            sleep 20
+            sudo docker stop $(sudo docker ps -aq) || true
+            sudo docker rm -f $(sudo docker ps -aq) || true
+            sudo docker system prune -af || true
             sudo docker volume prune -f || true
+            sudo docker network prune -f || true
             rm -f .env
             touch .env
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
