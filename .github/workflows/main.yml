@@ -76,8 +76,8 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:latest || exit 1
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest || exit 1
             sudo docker-compose down --remove-orphans || true
-            sleep 10
-            sudo docker rm -f foodgram-frontend foodgram-app foodgram-proxy foodgram-db || true
+            sleep 15
+            sudo docker ps -a --filter "name=foodgram" --format "{{.Names}}" | xargs -r sudo docker rm -f || true
             sudo docker container prune -f || true
             sudo docker image prune -f || true
             sudo docker network prune -f || true
