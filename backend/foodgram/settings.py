@@ -4,7 +4,7 @@ from decouple import Csv, config
 
 DATE_TIME_FORMAT = "%d/%m/%Y %H:%M"
 
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config("DEBUG", default=True, cast=bool)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
