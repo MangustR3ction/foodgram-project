@@ -2,9 +2,9 @@ name: Deploy Foodgram
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
