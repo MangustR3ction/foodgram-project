@@ -190,10 +190,5 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-## Лицензия
-
-MIT License
-
 ## Автор
 
-[Ваше имя]
